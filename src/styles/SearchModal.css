@@ -1,0 +1,7 @@
+.modal-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    top: 50%; /* Move it down to the center */
+    transform: translateY(+30%); /* Adjust position back up by half its height */
+}
