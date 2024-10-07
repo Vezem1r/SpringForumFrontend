@@ -1,0 +1,84 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9fafb;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+.topics-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.topic-item {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+}
+
+.topic-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; 
+    background-color: #f0f0f0 !important; /* Замените на нужный цвет */
+}
+
+/* Заголовок темы */
+.topic-item h3 {
+    font-size: 1.5rem; /* увеличенный размер шрифта */
+    margin: 0 0 10px; /* отступы */
+}
+
+/* Информация о теме */
+.topic-item p {
+    color: #6b7280; /* серый текст */
+    margin: 5px 0; /* отступы */
+}
+
+/* Пагинация */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.pagination button {
+    background-color: #e5e7eb;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    margin: 0 5px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.pagination button:hover {
+    background-color: #d1d5db;
+}
+
+.pagination button.active {
+    background-color: #3b3961;
+    color: white;
+}
+
+/* styles.css */
+
+.flex {
+    display: flex;
+}
+
+.justify-center {
+    justify-content: center !important;
+}
+
+.items-center {
+    align-items: center !important;
+}
+
+
+.space-x-2 > :not(:last-child) {
+    margin-right: 0.5rem; /* Уменьшите это значение для меньшего расстояния */
+}
+
