@@ -8,7 +8,7 @@ Additionally, the application utilizes **SMTP** for sending emails, providing us
 
 ---
 
-## <span style="color: #6b5b9a;">Frontend Repository</span>
+## <span style="color: #6b5b9a;">Backend Repository</span>
 Find the backend part of this project [here](https://github.com/Vezem1r/SpringForum/).
 
 ---
