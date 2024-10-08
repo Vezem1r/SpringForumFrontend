@@ -24,7 +24,7 @@ const ChatModal = ({ isOpen, onClose }) => {
             // Initialize STOMP client
             client.current = new Client({
                 webSocketFactory: () => {
-                    return new SockJS('http://localhost:8080/chat'); // Adjust the URL according to your server setup
+                    return new SockJS('http://localhost:8080/chat.sendMessage'); // Adjust the URL according to your server setup
                 },
                 debug: (str) => {
                     console.log(str);
@@ -32,7 +32,7 @@ const ChatModal = ({ isOpen, onClose }) => {
                 onConnect: () => {
                     console.log('Connected to WebSocket');
                     // Subscribe to a topic to receive messages
-                    client.current.subscribe('/topic/messages', (message) => {
+                    client.current.subscribe('/queue/messages', (message) => {
                         if (message.body) {
                             setMessages((prevMessages) => [...prevMessages, JSON.parse(message.body)]);
                         }

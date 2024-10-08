@@ -63,7 +63,7 @@ const TopicInfo = ({ topic, refreshTopic }) => {
                 </div>
             </div>
 
-            {/* User and Date Information with Attachments on the right */}
+            {/* User and Date Information with Attachments */}
             <div className="flex justify-between items-center mt-4">
                 <div className="flex flex-col text-gray-500">
                     <div className="flex items-center">
