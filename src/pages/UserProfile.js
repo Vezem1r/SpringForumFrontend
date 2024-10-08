@@ -26,14 +26,14 @@ const UserProfile = () => {
                 };
                 const response = await axios.get(`http://localhost:8080/profilepage/${username}?page=${pageNum}`, config);
                 const data = response.data;
-        
+
                 if (pageNum === 0) {
                     setProfileData(data.profile);
                     setTopics(data.profile.topics || []);
                 } else {
                     setTopics(prevTopics => [...prevTopics, ...(data.profile.topics || [])]);
                 }
-        
+
                 setTotalPages(data.totalPages);
                 setHasMore(pageNum < data.totalPages - 1);
             } catch (error) {
@@ -42,7 +42,6 @@ const UserProfile = () => {
                 setLoading(false);
             }
         };
-        
 
         fetchProfile(page);
     }, [username, page]);
@@ -104,11 +103,11 @@ const UserProfile = () => {
 
                 <h2 className="text-2xl font-semibold mt-6 mb-2 border-b pb-2 border-gray-300">User Topics</h2>
                 {topics.length > 0 ? (
-                    <TopicList>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {topics.map((topic) => (
-                            <TopicCard key={topic.topicId} topic={topic} />
+                            <TopicCard key={topic.topicId} topic={topic} className="w-full" />
                         ))}
-                    </TopicList>
+                    </div>
                 ) : (
                     <p className="mt-2 text-gray-600">No topics found.</p>
                 )}

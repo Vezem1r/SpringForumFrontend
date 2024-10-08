@@ -99,9 +99,11 @@ const HomePage = () => {
     };
 
     const handleTopicCreated = () => {
-        fetchTopics();
+        setTopics([]);
+        setPage(0);
+        fetchTopics(0);
     };
-
+    
     return (
         <div className="flex flex-col min-h-screen">
             <Header isLoggedIn={isLoggedIn} username={username} onLogout={logout} />

@@ -1,4 +1,3 @@
-/* Add your animations here */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -8,10 +7,8 @@
     }
 }
 
-/* ProfilePage.css */
-
 body {
-    background-color: #f5f5f5; /* Light gray background */
+    background-color: #f5f5f5;
 }
 
 .container {
@@ -19,52 +16,52 @@ body {
 }
 
 .bg-white {
-    background-color: #ffffff; /* White background for cards */
+    background-color: #ffffff;
 }
 
 .bg-blue-500 {
-    background-color: #6b5b9a; /* Purple for buttons */
+    background-color: #6b5b9a;
 }
 
 .bg-green-500 {
-    background-color: #7a6aa0; /* Slightly lighter purple for success buttons */
+    background-color: #7a6aa0;
 }
 
 .text-blue-500 {
-    color: #6b5b9a; /* Purple for text icons */
+    color: #6b5b9a;
 }
 
 .text-red-500 {
-    color: #e63946; /* Red for error messages */
+    color: #e63946;
 }
 
 .text-green-500 {
-    color: #2a9d8f; /* Green for success messages */
+    color: #2a9d8f;
 }
 
 input {
-    border-color: #6b5b9a; /* Purple border for input fields */
+    border-color: #6b5b9a; 
 }
 
 input:focus {
-    border-color: #8e7cbe; /* Lighter purple border on focus */
+    border-color: #8e7cbe;
 }
 
-/* Add hover effects for topics */
+
 .topic-item {
     transition: background-color 0.3s ease;
 }
 
 .topic-item:hover {
-    background-color: #e0c2e6; /* Light purple background on hover */
+    background-color: #e0c2e6;
 }
 
 .topic-item {
-    transition: transform 0.2s; /* Установка времени перехода */
+    transition: transform 0.2s;
 }
 
 .topic-item:hover {
-    transform: scale(1.05); /* Увеличение элемента при наведении */
+    transform: scale(1.05);
 }
 
 .container button {
@@ -83,17 +80,17 @@ input:focus {
     padding: 10px 20px;
     font-size: 16px;
     width: max-content;
-    background-color: #6b5b9a; /* Зеленый фон */
+    background-color: #6b5b9a;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
 }
 
 .button-style:hover {
-    background-color: #876ed1; /* Изменение цвета при наведении */
+    background-color: #876ed1;
 }
 
 .input-container {
@@ -107,7 +104,7 @@ input:focus {
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .input-style {
@@ -116,7 +113,7 @@ input:focus {
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 5px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Внутренняя тень */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); 
 }
 
 .submit-button {
