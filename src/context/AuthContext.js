@@ -17,7 +17,6 @@ export const AuthProvider = ({ children }) => {
             if (parts.length === 3) {
                 try {
                     const payload = JSON.parse(atob(parts[1]));
-                    console.log(payload)
                     setUsername(payload.sub);
                     setIsLoggedIn(true);
                 } catch (error) {

@@ -10,6 +10,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
     const [replies, setReplies] = useState([]);
     const [replyContent, setReplyContent] = useState('');
     const [attachments, setAttachments] = useState([]);
+    const [replyAttachments, setReplyAttachments] = useState([]);
     const [isReplying, setIsReplying] = useState(false);
     const [showAttachments, setShowAttachments] = useState(false);
     const [currentComment, setComment] = useState(comment);
@@ -60,7 +61,8 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
         formData.append('topicId', topicId);
         formData.append('parentId', comment.commentId);
 
-        attachments.forEach((file) => {
+
+        replyAttachments.forEach((file) => {
             formData.append('attachments', file);
         });
 
@@ -77,7 +79,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
                 const newReply = await response.json();
                 handleReplyAdded(comment.commentId, newReply);
                 setReplyContent('');
-                setAttachments([]);
+                setReplyAttachments([]);
                 setIsReplying(false);
             } else {
                 console.error('Failed to add reply');
@@ -113,6 +115,14 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
     };
 
     const handleReplyClick = () => {
+        if (isLoggedIn) {
+            setIsReplying(!isReplying);
+        } else {
+            toast.error('You need to be logged in to reply!');
+        }
+    };
+
+    const handleReplyToggle = () => {
         if (isLoggedIn) {
             setIsReplying(!isReplying);
         } else {
@@ -170,7 +180,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
                         )}
                         <button
                             className="text-purple-500 hover:underline"
-                            onClick={handleReplyClick}
+                            onClick={handleReplyToggle}
                         >
                             Reply
                         </button>
@@ -192,7 +202,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
                             <h4 className="font-semibold">Attachments:</h4>
                             <ul className="list-disc pl-4">
                                 {attachments.map((attachment) => (
-                                    <li key={attachment.attachmentId} className="text-blue-500 hover:underline">
+                                    <li key={attachment.createdAt.toString() + attachment.attachmentId} className="text-blue-500 hover:underline">
                                         <a
                                             href={`http://localhost:8080/topicpage/attachments/download/${attachment.attachmentId}`}
                                             className="text-purple-500 underline hover:text-purple-700"

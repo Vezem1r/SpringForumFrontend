@@ -99,9 +99,10 @@ const Header = () => {
 
                 <div className='flex ml-auto items-center'>
                     {isLoggedIn && (
-                        <div className="mr-6">
-                            <FaBell className="text-purple-600 cursor-pointer" onClick={() => openModal('notifications')} />
-                        </div>
+
+                        <button>
+                            <FaBell className="text-purple-600 cursor-pointer mr-3" onClick={() => console.log("Notification clicked")} />
+                        </button>
                     )}
 
                     <div className="relative user-menu">
