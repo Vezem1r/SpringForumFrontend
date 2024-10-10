@@ -243,9 +243,14 @@ const NotificationItem = ({ notification, markAsRead, deleteNotification }) => {
                     {notification.message}
                 </Link>
             </div>
-            
             <button
-                className="text-gray-400 hover:text-gray-600"
+                className="text-green-400 hover:text-gray-600 mr-3"
+                onClick={() => markAsRead(notification.id)}
+            >
+                <FaCheck />
+            </button>
+            <button
+                className="text-red-400 hover:text-gray-600"
                 onClick={() => deleteNotification(notification.id)}
             >
                 <FaTimes />

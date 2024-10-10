@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import CommentList from './CommentList';
+import ReplyList from './ReplyList'; 
 import { AuthContext } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -65,6 +66,8 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
         replyAttachments.forEach((file) => {
             formData.append('attachments', file);
         });
+
+        console.log(replyAttachments);
 
         try {
             const response = await fetch('http://localhost:8080/comments/add', {
@@ -202,7 +205,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
                             <h4 className="font-semibold">Attachments:</h4>
                             <ul className="list-disc pl-4">
                                 {attachments.map((attachment) => (
-                                    <li key={attachment.createdAt.toString() + attachment.attachmentId} className="text-blue-500 hover:underline">
+                                    <li key={attachment.attachmentId} className="text-blue-500 hover:underline">
                                         <a
                                             href={`http://localhost:8080/topicpage/attachments/download/${attachment.attachmentId}`}
                                             className="text-purple-500 underline hover:text-purple-700"
@@ -226,7 +229,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
                             <input
                                 type="file"
                                 multiple
-                                onChange={(e) => setAttachments([...attachments, ...Array.from(e.target.files)])}
+                                onChange={(e) => setReplyAttachments([...attachments, ...Array.from(e.target.files)])}
                                 className="mb-2 w-full text-sm text-gray-500 border border-gray-300 rounded-md p-2 hover:bg-gray-50 transition"
                             />
                             <button type="submit" className="mt-2 mb-6 bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors">
@@ -237,7 +240,12 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
 
                     {showReplies && replies.length > 0 && (
                         <div>
-                            <CommentList comments={replies} topicId={topicId} />
+                            <ReplyList
+                                replies={replies}
+                                topicId={topicId}
+                                handleReplyAdded={handleReplyAdded}
+                                refreshTopic={refreshTopic}
+                            />
                             {hasMoreReplies && totalReplies > replies.length && (
                                 <button
                                     onClick={loadMoreReplies}

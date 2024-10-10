@@ -59,9 +59,20 @@ const Header = () => {
         openModal('login');
     };
 
-    const handleLogout = () => {
-        logout();
-        setMenuOpen(false);
+    const handleLogout = async () => {
+        try {
+            await fetch('http://localhost:8080/users/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+            logout();
+            setMenuOpen(false);
+        } catch (error) {
+            console.error('Logout failed', error);
+        }
     };
 
     const handleMessagesClick = () => {
