@@ -104,8 +104,8 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
             });
 
             if (response.ok) {
-                await fetchUpdatedRating(); // Fetch updated rating after voting
-                refreshTopic(); // Optional: refresh topic if needed
+                await fetchUpdatedRating();
+                refreshTopic();
             } else {
                 console.error('Failed to update vote');
             }

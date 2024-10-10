@@ -8,12 +8,12 @@ Additionally, the application utilizes **SMTP** for sending emails, providing us
 
 ---
 
-## <span style="color: #6b5b9a;">Backend Repository</span>
+## Backend Repository
 Find the backend part of this project [here](https://github.com/Vezem1r/SpringForum/).
 
 ---
 
-## <span style="color: #6b5b9a;">Roles and Permissions</span>
+## Roles and Permissions
 
 This forum application includes various roles, each with different permissions:
 
@@ -41,7 +41,7 @@ This forum application includes various roles, each with different permissions:
 
 ---
 
-## <span style="color: #6b5b9a;">Technologies Used</span>
+## Technologies Used
 
 This project is built with the following technologies:
 
@@ -51,6 +51,8 @@ This project is built with the following technologies:
   - 🗄️ MariaDB (as the database)
   - 🔑 JWT for authentication
   - 🛠️ Lombok (for reducing boilerplate code)
+  - 📄 Swagger (for API documentation)
+  
 
 - **Frontend**:
   - ⚛️ React
@@ -61,7 +63,7 @@ This project is built with the following technologies:
 
 ---
 
-## <span style="color: #6b5b9a;">How to Build the Project</span>
+## How to Build the Project
 
 To set up and run the backend project locally, follow these steps:
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { FaUserCircle, FaSignInAlt, FaChevronDown, FaBell, FaCog, FaComment } from 'react-icons/fa';
+import { FaUserCircle, FaSignInAlt, FaChevronDown, FaCog, FaComment } from 'react-icons/fa';
 import LoginModal from '../modals/LoginModal';
 import RegisterModal from '../modals/RegisterModal';
 import ForgotPasswordModal from '../modals/ForgetPasswordModal';
@@ -9,6 +9,8 @@ import { AuthContext } from '../context/AuthContext';
 import UploadAvatarModal from '../modals/UploadAvatarModal';
 import ChangeUsernameModal from '../modals/ChangeUsernameModal';
 import ChatModal from '../modals/ChatModal';
+import NotificationDropDown from './NotificationDropdown';
+
 
 const Header = () => {
     const { isLoggedIn, username, login, logout } = useContext(AuthContext);
@@ -21,8 +23,7 @@ const Header = () => {
     const [uploadAvatarModalVisible, setUploadAvatarModalVisible] = useState(false);
     const [changeUsernameModalVisible, setChangeUsernameModalVisible] = useState(false);
     const [chatModalVisible, setChatModalVisible] = useState(false);
-
-    // useEffect(() => {}, [isLoggedIn, username, login, logout])
+    const [notificationsOpen, setNotificationsOpen] = useState(false);
 
     const toggleMenu = () => {
         setMenuOpen((prev) => !prev);
@@ -81,6 +82,9 @@ const Header = () => {
             setMenuOpen(false);
             setSettingsOpen(false);
         }
+        if (notificationsOpen && !e.target.closest('.notification-dropdown')) {
+            setNotificationsOpen(false);
+        }
     };
 
     useEffect(() => {
@@ -88,7 +92,11 @@ const Header = () => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [menuOpen]);
+    }, [menuOpen, notificationsOpen]);
+
+    const toggleNotifications = () => {
+        setNotificationsOpen((prev) => !prev);
+    };
 
     return (
         <header className='flex shadow-md py-4 px-4 sm:px-10 bg-white font-sans min-h-[50px] tracking-wide relative z-50'>
@@ -96,14 +104,8 @@ const Header = () => {
                 <Link to="/" className='text-purple-600 font-bold text-xl'>
                     Forum
                 </Link>
-
                 <div className='flex ml-auto items-center'>
-                    {isLoggedIn && (
-
-                        <button>
-                            <FaBell className="text-purple-600 cursor-pointer mr-3" onClick={() => console.log("Notification clicked")} />
-                        </button>
-                    )}
+                {isLoggedIn && <NotificationDropDown />}
 
                     <div className="relative user-menu">
                         {!isLoggedIn ? (

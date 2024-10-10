@@ -7,7 +7,7 @@ import TopicInfo from '../components/topic/TopicInfo';
 import CommentList from '../components/topic/CommentList';
 import CommentForm from '../components/topic/CommentForm'; 
 import { AuthContext } from '../context/AuthContext';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const TopicPage = () => {
