@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import TopicPage from './pages/TopicPage';
 import UserProfile from './pages/UserProfile';
 import { ToastContainer } from 'react-toastify';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/topic/:id" element={<TopicPage />} />
             <Route path="/profile/:username" element={<UserProfile />} />
+            <Route path="/dashboard" element={<AdminDashboard />} />
           </Routes>
         </div>
       </Router>
