@@ -4,6 +4,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 import TagManagement from '../components/admin/TagManagement';
 import CategoryManagement from '../components/admin/CategoryManagement';
+import UserManagement from '../components/admin/UserManagement';
 import Header from '../components/Header';
 
 ChartJS.register(ArcElement, Title, Tooltip, Legend);
@@ -14,6 +15,7 @@ const AdminDashboard = () => {
     const [error, setError] = useState(null);
     const [showTagManagement, setShowTagManagement] = useState(false);
     const [showCategoryManagement, setShowCategoryManagement] = useState(false);
+    const [showUserManagement, setShowUserManagement] = useState(false);
 
     useEffect(() => {
         const fetchAdminData = async () => {
@@ -94,6 +96,12 @@ const AdminDashboard = () => {
                 >
                     Manage Categories
                 </button>
+                <button
+                    onClick={() => setShowUserManagement(true)}
+                    className="bg-purple-600 text-white px-4 py-2 rounded-md"
+                >
+                    Manage Users
+                </button>
             </div>
             {showTagManagement && (
                 <TagManagement onClose={() => setShowTagManagement(false)} />
@@ -101,6 +109,10 @@ const AdminDashboard = () => {
 
             {showCategoryManagement && (
                 <CategoryManagement onClose={()  => setShowCategoryManagement(false)} />
+            )}
+
+            {showUserManagement && (
+                <UserManagement onClose={() => setShowUserManagement(false)} />
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
