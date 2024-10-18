@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 import TagManagement from '../components/admin/TagManagement';
+import CategoryManagement from '../components/admin/CategoryManagement';
+import Header from '../components/Header';
 
 ChartJS.register(ArcElement, Title, Tooltip, Legend);
 
@@ -11,6 +13,7 @@ const AdminDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showTagManagement, setShowTagManagement] = useState(false);
+    const [showCategoryManagement, setShowCategoryManagement] = useState(false);
 
     useEffect(() => {
         const fetchAdminData = async () => {
@@ -71,21 +74,33 @@ const AdminDashboard = () => {
     };
 
     return (
+        <div>
+        <Header />
         <div className="container mx-auto p-6 bg-gray-100">
             <header className="mb-6">
                 <h1 className="text-5xl font-bold text-purple-600">Admin Dashboard</h1>
                 <p className="text-gray-600 text-lg">Overview of the forum's statistics</p>
             </header>
-
-            <button
-                onClick={() => setShowTagManagement(true)}
-                className="bg-purple-600 text-white px-4 py-2 rounded-md mb-4"
-            >
-                Manage Tags
-            </button>
-
+            <div className="flex space-x-4 mb-4">
+                <button
+                    onClick={() => setShowTagManagement(true)}
+                    className="bg-purple-600 text-white px-4 py-2 rounded-md"
+                >
+                    Manage Tags
+                </button>
+                <button
+                    onClick={() => setShowCategoryManagement(true)}
+                    className="bg-purple-600 text-white px-4 py-2 rounded-md"
+                >
+                    Manage Categories
+                </button>
+            </div>
             {showTagManagement && (
                 <TagManagement onClose={() => setShowTagManagement(false)} />
+            )}
+
+            {showCategoryManagement && (
+                <CategoryManagement onClose={()  => setShowCategoryManagement(false)} />
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
@@ -129,6 +144,7 @@ const AdminDashboard = () => {
                     <Doughnut data={commentsData} options={{ responsive: true }} />
                 </div>
             </div>
+        </div>
         </div>
     );
 };
