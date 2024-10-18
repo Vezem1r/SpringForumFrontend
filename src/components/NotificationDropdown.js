@@ -21,7 +21,7 @@ const NotificationDropDown = () => {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            setNotifications(response.data);
+            setNotifications(response.data ? response.data : []);
         } catch (error) {
             setError('Error fetching notifications. Please try again.');
             console.error('Error fetching notifications:', error);
@@ -108,6 +108,9 @@ const NotificationDropDown = () => {
     }, []);
 
     const groupNotificationsByDate = (notifications) => {
+        if(!Array.isArray(notifications)) {
+            notifications = []
+        }
         const grouped = { today: [], yesterday: [], older: [] };
         const today = new Date();
         const yesterday = new Date();

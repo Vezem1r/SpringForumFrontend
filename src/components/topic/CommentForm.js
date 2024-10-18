@@ -3,9 +3,17 @@ import React, { useState } from 'react';
 const CommentForm = ({ topicId, onCommentAdded }) => {
     const [content, setContent] = useState('');
     const [attachments, setAttachments] = useState([]);
+    const [error, setError] = useState('');
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+
+        if (!content.trim()) {
+            setError('Comment cannot be empty');
+            return;
+        }        
 
         const formData = new FormData();
         formData.append('content', content);
@@ -40,6 +48,7 @@ const CommentForm = ({ topicId, onCommentAdded }) => {
     return (
         <form onSubmit={handleSubmit} className="mb-4 mt-4 bg-white shadow-md rounded-lg p-4 border border-gray-300">
             <h2 className="text-lg font-semibold text-gray-800 mb-2">Add a Comment</h2>
+            {error && <p className="text-red-600">{error}</p>}
             <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}

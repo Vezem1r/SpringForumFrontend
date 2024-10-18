@@ -4,7 +4,7 @@ import axios from 'axios';
 import Header from '../components/Header';
 import Banner from '../components/topic/banner';
 import TopicInfo from '../components/topic/TopicInfo';
-import CommentList from '../components/topic/CommentList';
+import CommentList from '../components/topic/CommentList'; 
 import CommentForm from '../components/topic/CommentForm'; 
 import { AuthContext } from '../context/AuthContext';
 import { toast } from 'react-toastify';
@@ -16,17 +16,28 @@ const TopicPage = () => {
     const [topic, setTopic] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+    const [pageNum, setPageNum] = useState(0);
+    const [hasMoreComments, setHasMoreComments] = useState(true);
+
     const BASE_URL = "http://localhost:8080/banners/";
 
     const fetchTopic = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/topicpage/${id}`);
+            const response = await axios.get(`http://localhost:8080/topicpage/${id}?page=${pageNum}`);
             const updatedTopic = {
                 ...response.data,
                 bannerUrl: response.data.bannerUrl ? BASE_URL + response.data.bannerUrl.split('\\').pop() : null
             };
-            setTopic(updatedTopic);
+            setTopic(prevTopic => {
+                if (pageNum === 0) {
+                    return updatedTopic;
+                }
+                return {
+                    ...prevTopic,
+                    comments: [...prevTopic.comments, ...response.data.comments],
+                };
+            });
+            setHasMoreComments(response.data.comments.length > 0);
         } catch (err) {
             setError('Failed to load topic data');
             console.error("Error fetching topic data:", err);
@@ -35,33 +46,38 @@ const TopicPage = () => {
         }
     };
 
-
     useEffect(() => {
         fetchTopic();
-    }, [id]);
+    }, [id, pageNum]);
 
     const handleCommentAdded = (newComment) => {
-        setTopic((prevTopic) => ({
+        setTopic(prevTopic => ({
             ...prevTopic,
             comments: [...prevTopic.comments, newComment],
         }));
     };
 
     const handleReplyAdded = (parentId, newReply) => {
-        setTopic((prevTopic) => {
+        setTopic(prevTopic => {
             const updatedComments = prevTopic.comments.map(comment => {
                 if (comment.commentId === parentId) {
+                    const oldReplies = comment.replies ? comment.replies : []; 
                     return {
                         ...comment,
-                        replies: [...comment.replies, newReply],
+                        replies: [...oldReplies, newReply],
                         replyCount: comment.replyCount + 1
                     };
                 }
                 return comment;
             });
-
             return { ...prevTopic, comments: updatedComments };
         });
+    };
+
+    const handleLoadMoreComments = () => {
+        if (hasMoreComments) {
+            setPageNum(prevPage => prevPage + 1);
+        }
     };
 
     const handleReplyClick = () => {
@@ -82,9 +98,21 @@ const TopicPage = () => {
                 {isLoggedIn ? (
                     <CommentForm topicId={topic.topicId} onCommentAdded={handleCommentAdded} /> 
                 ) : null}
-                <CommentList comments={topic.comments} topicId={topic.topicId} handleReplyAdded={handleReplyAdded} onReplyClick={handleReplyClick} 
-                refreshTopic={fetchTopic}
+                <CommentList 
+                    comments={topic.comments} 
+                    topicId={topic.topicId} 
+                    handleReplyAdded={handleReplyAdded} 
+                    onReplyClick={handleReplyClick}
+                    refreshTopic={fetchTopic}
                 />
+                {hasMoreComments && (
+                    <button 
+                        onClick={handleLoadMoreComments}
+                        className="mt-4 text-purple-500 hover:underline"
+                    >
+                        Load More Comments
+                    </button>
+                )}
             </div>
         </div>
     );
