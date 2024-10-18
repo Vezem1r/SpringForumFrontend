@@ -112,7 +112,7 @@ const HomePage = () => {
             </div>
 
             <main className="flex-grow p-4">
-            {(filteredTopics.length === 0 || searchQuery === "" && filteredTopics.length === 1) && (
+            {(filteredTopics.length === 0 || searchQuery === "" && filteredTopics.length === 0) && (
                 <div className="mt-4 text-center text-gray-600">
                     No topics found that match your criteria.
                 </div>

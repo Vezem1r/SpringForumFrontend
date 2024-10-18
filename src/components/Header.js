@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { FaUserCircle, FaSignInAlt, FaChevronDown, FaCog, FaComment } from 'react-icons/fa';
+import { FaUserCircle, FaUser, FaSignInAlt, FaChevronDown, FaCog, FaComment } from 'react-icons/fa';
 import LoginModal from '../modals/LoginModal';
 import RegisterModal from '../modals/RegisterModal';
 import ForgotPasswordModal from '../modals/ForgetPasswordModal';
@@ -11,9 +11,8 @@ import ChangeUsernameModal from '../modals/ChangeUsernameModal';
 import ChatModal from '../modals/ChatModal';
 import NotificationDropDown from './NotificationDropdown';
 
-
 const Header = () => {
-    const { isLoggedIn, username, login, logout } = useContext(AuthContext);
+    const { isLoggedIn, isAdmin, username, login, logout } = useContext(AuthContext);
     const [menuOpen, setMenuOpen] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [prefilledEmail, setPrefilledEmail] = useState('');
@@ -60,8 +59,8 @@ const Header = () => {
     };
 
     const handleLogout = () => {
-            logout();
-            setMenuOpen(false);
+        logout();
+        setMenuOpen(false);
     };
 
     const handleMessagesClick = () => {
@@ -141,7 +140,16 @@ const Header = () => {
                                         >
                                             <FaComment className="mr-2" /> Messages
                                         </button>
-                                        
+
+                                        {isAdmin && (
+                                            <button 
+                                                onClick={() => window.location.href = '/dashboard'} 
+                                                className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
+                                            >
+                                                <FaUser className="mr-2" /> Dashboard
+                                            </button>
+                                        )}
+
                                         <div>
                                             <button 
                                                 onClick={() => setSettingsOpen((prev) => !prev)} 

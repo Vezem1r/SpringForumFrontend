@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -18,6 +19,13 @@ export const AuthProvider = ({ children }) => {
                 try {
                     const payload = JSON.parse(atob(parts[1]));
                     setUsername(payload.sub);
+
+                    if (payload.role && payload.role.includes('ADMIN')) {
+                        setIsAdmin(true);
+                    } else {
+                        setIsAdmin(false);
+                    }
+
                     setIsLoggedIn(true);
                 } catch (error) {
                     console.error('Error decoding token:', error);
@@ -44,10 +52,11 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('token');
         setIsLoggedIn(false);
         setUsername('');
+        setIsAdmin(false);
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, username, login, logout, validateUsername }}>
+        <AuthContext.Provider value={{ isLoggedIn, username, isAdmin, login, logout, validateUsername }}>
             {children}
         </AuthContext.Provider>
     );
