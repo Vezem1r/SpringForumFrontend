@@ -24,7 +24,7 @@ const ChatModal = ({ isOpen, onClose }) => {
             // Initialize STOMP client
             client.current = new Client({
                 webSocketFactory: () => {
-                    return new SockJS('http://localhost:8080/chat.sendMessage'); // Adjust the URL according to your server setup
+                    return new SockJS('http://localhost:8080/connect'); // Adjust the URL according to your server setup
                 },
                 debug: (str) => {
                     console.log(str);
@@ -32,11 +32,10 @@ const ChatModal = ({ isOpen, onClose }) => {
                 onConnect: () => {
                     console.log('Connected to WebSocket');
                     // Subscribe to a topic to receive messages
-                    client.current.subscribe('/queue/messages', (message) => {
-                        if (message.body) {
-                            setMessages((prevMessages) => [...prevMessages, JSON.parse(message.body)]);
-                        }
+                    client.current.subscribe('/message/hello', (message) => {
+                        console.log(JSON.parse(message.body).value);
                     });
+                    client.current.publish({ destination: '/app/hello', body: JSON.stringify({ "value": "Hello" }) });
                 },
                 onStompError: (frame) => {
                     console.error('Broker reported error: ' + frame.headers['message']);

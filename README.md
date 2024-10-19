@@ -24,7 +24,7 @@ To set up and run the backend project locally, follow these steps:
    cd SpringForumFrontend
   ```
 
-2. **Install dependencies:**:
+2. **Install dependencies:**
 Make sure you have Node.js and npm
   ```bash
    npm install
