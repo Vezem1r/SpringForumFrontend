@@ -25,7 +25,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
             try {
                 const response = await fetch(`http://localhost:8080/topicpage/${comment.commentId}/replies?page=${page}`);
                 const data = await response.json();
-                setReplies((prevReplies) => [...prevReplies, ...data.content]);
+                setReplies(data.content);
                 setTotalReplies(data.totalElements);
                 setHasMoreReplies(data.content.length > 0);
             } catch (error) {

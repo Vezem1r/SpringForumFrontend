@@ -5,11 +5,35 @@ It supports features such as user authentication, real-time communication using 
 Additionally, the application utilizes **SMTP** for sending emails, providing users with essential email verification.
 
 ![Forum fast :) preview](preview.gif)
+![Forum fast :) preview](admin_preview.gif)
 
 ---
 
 ## Backend Repository
 Find the backend part of this project [here](https://github.com/Vezem1r/SpringForum/).
+
+---
+
+## How to Build the Project
+
+To set up and run the backend project locally, follow these steps:
+
+1. **Clone the repository**:
+  ```bash
+   git clone https://github.com/Vezem1r/SpringForumFrontend.git
+   cd SpringForumFrontend
+  ```
+
+2. **Install dependencies:**:
+Make sure you have Node.js and npm
+  ```bash
+   npm install
+  ```
+
+3. **Start the project**:
+  ```bash
+   npm start
+  ```
 
 ---
 
@@ -20,7 +44,7 @@ This forum application includes various roles, each with different permissions:
 - **Admin**
   - 🛠️ Full access to the forum.
   - 👥 Can manage users, topics, comments, categories, and tags.
-
+  - 📊 Can view basic forum statistics.
 - **User**
   - 📝 Can create topics and comments with multipart attachments.
   - 💬 Can reply to comments.
@@ -36,7 +60,6 @@ This forum application includes various roles, each with different permissions:
 - **Guest**
   - 👁️ Can view users' profiles, topics, and comments.
   - 🔍 Can search for topics based on various criteria.
-  - 🆕 Can log in or register with email verification.
   - 🚫 No permissions to interact with posts or comments.
 
 ---
@@ -52,6 +75,7 @@ This project is built with the following technologies:
   - 🔑 JWT for authentication
   - 🛠️ Lombok (for reducing boilerplate code)
   - 📄 Swagger (for API documentation)
+  - 📜 Logback (for logging)
   
 
 - **Frontend**:
@@ -61,12 +85,3 @@ This project is built with the following technologies:
   - 🍞 React Toastify
   - 📦 React Icons
 
----
-
-## How to Build the Project
-
-To set up and run the backend project locally, follow these steps:
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/Vezem1r/SpringForum.git
