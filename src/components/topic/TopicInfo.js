@@ -1,12 +1,15 @@
 import React, { useState, useContext } from 'react';
-import { FaUser, FaTag, FaCalendarAlt, FaPaperclip, FaFolder } from 'react-icons/fa';
+import { FaUser, FaTag, FaCalendarAlt, FaPaperclip, FaFolder, FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../../context/AuthContext';
+import EditTopicModal from './EditTopicModal'; 
 
 const TopicInfo = ({ topic, refreshTopic }) => {
     const [rating, setRating] = useState(topic.rating);
-    const { isLoggedIn } = useContext(AuthContext);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const { isLoggedIn, isAdmin } = useContext(AuthContext);
 
     const handleVote = async (value) => {
         if (!isLoggedIn) {
@@ -30,6 +33,31 @@ const TopicInfo = ({ topic, refreshTopic }) => {
         } catch (error) {
             console.error('Error updating vote:', error);
         }
+    };
+
+    const handleDelete = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/admin/topics/${topic.topicId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            if (response.ok) {
+                toast.success('Topic deleted successfully!');
+                refreshTopic();
+            } else {
+                toast.error('Failed to delete topic');
+            }
+        } catch (error) {
+            console.error('Error deleting topic:', error);
+        } finally {
+            setShowDeleteConfirm(false);
+        }
+    };
+
+    const handleEdit = () => {
+        setShowEditModal(true);
     };
 
     return (
@@ -63,7 +91,30 @@ const TopicInfo = ({ topic, refreshTopic }) => {
                 </div>
             </div>
 
-            {/* User and Date Information with Attachments */}
+            {showDeleteConfirm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                    <div className="bg-white rounded-lg p-4 shadow-md">
+                        <h3 className="text-lg text-red-600 font-bold">Confirm Deletion</h3>
+                        <p>Are you sure you want to delete this topic?</p>
+                        <div className="flex justify-between mt-4">
+                            <button onClick={() => setShowDeleteConfirm(false)} className="mr-2 text-gray-600">
+                                Cancel
+                            </button>
+                            <button onClick={handleDelete} className="bg-red-600 text-white px-4 py-2 rounded">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showEditModal && (
+                <EditTopicModal 
+                    topic={topic} 
+                    onClose={() => setShowEditModal(false)} 
+                    refreshTopic={refreshTopic} 
+                />
+            )}
             <div className="flex justify-between items-center mt-4">
                 <div className="flex flex-col text-gray-500">
                     <div className="flex items-center">
@@ -85,8 +136,6 @@ const TopicInfo = ({ topic, refreshTopic }) => {
                         <span>Category: <span className="font-semibold">{topic.category}</span></span>
                     </div>
                 </div>
-
-                {/* Attachments Section */}
                 {topic.attachments.length > 0 && (
                     <div className="mt-4 ml-4">
                         <h2 className="text-xl font-bold flex items-center">
@@ -109,16 +158,29 @@ const TopicInfo = ({ topic, refreshTopic }) => {
                     </div>
                 )}
             </div>
-
-            {/* Tags Section */}
             <div className="mt-4">
                 <h2 className="text-xl font-bold">Tags</h2>
-                <div className="flex flex-wrap mt-2">
-                    {topic.tagNames.map((tag, index) => (
-                        <span key={index} className="inline-block bg-purple-200 text-purple-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">
-                            {tag}
-                        </span>
-                    ))}
+                <div className="flex justify-between items-center mt-2">
+                    <div className="flex flex-wrap">
+                        {topic.tagNames.map((tag, index) => (
+                            <span
+                                key={index}
+                                className="inline-block bg-purple-200 text-purple-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
+                            >
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+                    {isAdmin && (
+                        <div className="flex space-x-2">
+                            <button onClick={handleEdit} className="text-gray-600 hover:text-gray-800">
+                                <FaEdit />
+                            </button>
+                            <button onClick={() => setShowDeleteConfirm(true)} className="text-red-600 hover:text-red-800">
+                                <FaTrash />
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
