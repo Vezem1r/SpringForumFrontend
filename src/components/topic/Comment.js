@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import CommentList from './CommentList';
 import ReplyList from './ReplyList'; 
 import { AuthContext } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
+import { FaTrash } from 'react-icons/fa';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
     const [showReplies, setShowReplies] = useState(false);
-    const { isLoggedIn } = useContext(AuthContext);
+    const { isLoggedIn, isAdmin } = useContext(AuthContext);
     const [replies, setReplies] = useState([]);
     const [replyContent, setReplyContent] = useState('');
     const [attachments, setAttachments] = useState([]);
@@ -18,6 +18,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
     const [pageNum, setPageNum] = useState(0);
     const [hasMoreReplies, setHasMoreReplies] = useState(true);
     const [totalReplies, setTotalReplies] = useState(0);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
         const fetchReplies = async (page) => {
@@ -117,14 +118,6 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
         }
     };
 
-    const handleReplyClick = () => {
-        if (isLoggedIn) {
-            setIsReplying(!isReplying);
-        } else {
-            toast.error('You need to be logged in to reply!');
-        }
-    };
-
     const handleReplyToggle = () => {
         if (isLoggedIn) {
             setIsReplying(!isReplying);
@@ -136,6 +129,26 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
     const loadMoreReplies = () => {
         if (hasMoreReplies) {
             setPageNum((prevPage) => prevPage + 1);
+        }
+    };
+
+    const handleDeleteComment = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/admin/comments/${currentComment.commentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            if (response.ok) {
+                toast.success('Comment deleted successfully!');
+            } else {
+                console.error('Failed to delete comment');
+            }
+        } catch (error) {
+            console.error('Error deleting comment:', error);
+        } finally {
+            setShowDeleteConfirm(false);
         }
     };
 
@@ -165,6 +178,13 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
                             {comment.username}
                         </a>
                         <span className="text-gray-500">{new Date(comment.createdAt).toLocaleString()}</span>
+                        {isAdmin && (
+                            <button 
+                                onClick={() => setShowDeleteConfirm(true)} 
+                                className="text-red-600 hover:text-red-800 ml-4">
+                                <FaTrash />
+                            </button>
+                        )}
                     </div>
                     <div className="comment-content mt-2 text-gray-700">{comment.content}</div>
                     <div className="comment-actions mt-2 flex space-x-2">
@@ -258,6 +278,13 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
                     )}
                 </div>
             </div>
+            {showDeleteConfirm && (
+                <div className="delete-confirmation">
+                    <p>Are you sure you want to delete this comment?</p>
+                    <button onClick={handleDeleteComment} className="text-red-600 hover:text-red-800">Yes, delete</button>
+                    <button onClick={() => setShowDeleteConfirm(false)} className="text-gray-600 hover:text-gray-800">Cancel</button>
+                </div>
+            )}
         </div>
     );
 };
