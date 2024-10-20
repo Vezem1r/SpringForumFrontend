@@ -16,7 +16,7 @@ Find the backend part of this project [here](https://github.com/Vezem1r/SpringFo
 
 ## How to Build the Project
 
-To set up and run the backend project locally, follow these steps:
+To set up and run the frontend project locally, follow these steps:
 
 1. **Clone the repository**:
   ```bash

@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
-import axios from 'axios'; // Import axios for making HTTP requests
+import axios from 'axios';
+import {AuthContext} from "../context/AuthContext"; // Import axios for making HTTP requests
 
 const ChatModal = ({ isOpen, onClose }) => {
     const [chatRooms, setChatRooms] = useState([]); // State to hold chat rooms
@@ -9,17 +10,12 @@ const ChatModal = ({ isOpen, onClose }) => {
     const [newMessage, setNewMessage] = useState(''); // State for new message input
     const [selectedChatRoom, setSelectedChatRoom] = useState(null); // Selected chat room
     const client = useRef(null);
+    const { username } = useContext(AuthContext);
+    const [chatRoomId, setChatRoomId] = useState(-1);
 
     useEffect(() => {
         if (isOpen) {
-            // Fetch existing chat rooms on modal open
-            axios.get('/api/chats') // Adjust the URL according to your server setup
-                .then(response => {
-                    setChatRooms(response.data);
-                })
-                .catch(error => {
-                    console.error('Error fetching chat rooms:', error);
-                });
+            const token = localStorage.getItem('token');
 
             // Initialize STOMP client
             client.current = new Client({
@@ -31,11 +27,26 @@ const ChatModal = ({ isOpen, onClose }) => {
                 },
                 onConnect: () => {
                     console.log('Connected to WebSocket');
-                    // Subscribe to a topic to receive messages
-                    client.current.subscribe('/message/hello', (message) => {
-                        console.log(JSON.parse(message.body).value);
-                    });
-                    client.current.publish({ destination: '/app/hello', body: JSON.stringify({ "value": "Hello" }) });
+                    axios.get("http://localhost:8080/chatRoom/all", {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }).then(response => {
+                        console.log(response)
+                        const responseChatRoomId = response.data[0].id;
+                        setChatRoomId(responseChatRoomId);
+                        client.current.subscribe(`/message/${responseChatRoomId}`, (message) => {
+                            message = JSON.parse(message.body);
+                            setMessages((prevMessages) => [...prevMessages, message]);
+                        });
+                        axios.get(`http://localhost:8080/chatRoom/${responseChatRoomId}/messages`, {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                        }}).then(response => {
+                            setMessages(response.data)
+                            console.log(response.data)
+                        });
+                    })
                 },
                 onStompError: (frame) => {
                     console.error('Broker reported error: ' + frame.headers['message']);
@@ -53,17 +64,17 @@ const ChatModal = ({ isOpen, onClose }) => {
 
     // Function to send a message to the selected chat room
     const sendMessage = () => {
-        if (!newMessage || !selectedChatRoom) return; // Prevent sending empty messages
+        // if (!newMessage || !selectedChatRoom) return; // Prevent sending empty messages
+        if (!newMessage) return;
 
         const chatMessageDto = {
-            recipient: selectedChatRoom.recipient.username, // Assuming each chat room has a recipient object
+            chatRoomId: chatRoomId,
+            senderUsername: username,
+            recipientUsername: "Guest",
             content: newMessage,
         };
 
-        client.current.publish({
-            destination: '/app/chat.sendMessage', // Adjust this destination based on your server setup
-            body: JSON.stringify(chatMessageDto),
-        });
+        client.current.publish({ destination: '/app/chat', body: JSON.stringify(chatMessageDto) });
 
         setNewMessage(''); // Clear the message input
     };
@@ -99,7 +110,7 @@ const ChatModal = ({ isOpen, onClose }) => {
                     <div className="chat-messages h-full overflow-auto">
                         {messages.map((msg, index) => (
                             <div key={index} className="message p-2">
-                                <strong>{msg.sender}: </strong>
+                                <strong>{msg.sender.username}: </strong>
                                 {msg.content}
                             </div>
                         ))}
