@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../axiosInstance';
 
 const TagManagement = ({ onClose }) => {
     const [tags, setTags] = useState([]);
@@ -12,7 +12,7 @@ const TagManagement = ({ onClose }) => {
         const fetchTags = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8080/admin/tag/getAllTags', {
+                const response = await apiClient.get('/admin/tag/getAllTags', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -29,7 +29,7 @@ const TagManagement = ({ onClose }) => {
     const handleCreateTag = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('http://localhost:8080/admin/tag/create', { name: tagName }, {
+            const response = await apiClient.post('/admin/tag/create', { name: tagName }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -44,7 +44,7 @@ const TagManagement = ({ onClose }) => {
     const handleUpdateTag = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put(`http://localhost:8080/admin/tag/update/${editingTagId}`, { name: tagName }, {
+            const response = await apiClient.put(`/admin/tag/update/${editingTagId}`, { name: tagName }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -60,7 +60,7 @@ const TagManagement = ({ onClose }) => {
     const handleDeleteTag = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:8080/admin/tag/delete/${id}`, {
+            await apiClient.delete(`/admin/tag/delete/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

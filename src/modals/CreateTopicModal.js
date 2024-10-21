@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import apiClient from '../axiosInstance';
 
 const CreateTopicModal = ({ isOpen, onClose, onTopicCreated }) => {
     const [title, setTitle] = useState('');
@@ -15,7 +15,7 @@ const CreateTopicModal = ({ isOpen, onClose, onTopicCreated }) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/homepage/getAllCategories');
+                const response = await apiClient.get('/homepage/getAllCategories');
                 setCategories(response.data);
             } catch (error) {
                 console.error('Failed to fetch categories:', error);
@@ -50,7 +50,7 @@ const CreateTopicModal = ({ isOpen, onClose, onTopicCreated }) => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/topics/create', formData, {
+            const response = await apiClient.post('/topics/create', formData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'

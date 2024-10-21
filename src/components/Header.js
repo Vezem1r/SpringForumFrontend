@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { FaUserCircle, FaUser, FaSignInAlt, FaChevronDown, FaCog, FaComment } from 'react-icons/fa';
+import { FaUserCircle, FaUser, FaSignInAlt, FaChevronDown, FaCog } from 'react-icons/fa';
 import LoginModal from '../modals/LoginModal';
 import RegisterModal from '../modals/RegisterModal';
 import ForgotPasswordModal from '../modals/ForgetPasswordModal';
@@ -8,7 +8,6 @@ import VerificationModal from '../modals/VerificationModal';
 import { AuthContext } from '../context/AuthContext';
 import UploadAvatarModal from '../modals/UploadAvatarModal';
 import ChangeUsernameModal from '../modals/ChangeUsernameModal';
-import ChatModal from '../modals/ChatModal';
 import NotificationDropDown from './NotificationDropdown';
 
 const Header = () => {
@@ -21,7 +20,6 @@ const Header = () => {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [uploadAvatarModalVisible, setUploadAvatarModalVisible] = useState(false);
     const [changeUsernameModalVisible, setChangeUsernameModalVisible] = useState(false);
-    const [chatModalVisible, setChatModalVisible] = useState(false);
     const [notificationsOpen, setNotificationsOpen] = useState(false);
 
     const toggleMenu = () => {
@@ -63,11 +61,6 @@ const Header = () => {
         setMenuOpen(false);
     };
 
-    const handleMessagesClick = () => {
-        setChatModalVisible(true);
-        setMenuOpen(false);
-    };
-
     const handleUploadAvatarSuccess = (message) => {
         console.log(message);
     };
@@ -91,11 +84,7 @@ const Header = () => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [menuOpen, notificationsOpen]);
-
-    const toggleNotifications = () => {
-        setNotificationsOpen((prev) => !prev);
-    };
+    }, [handleClickOutside]);
 
     return (
         <header className='flex shadow-md py-4 px-4 sm:px-10 bg-white font-sans min-h-[50px] tracking-wide relative z-50'>
@@ -133,12 +122,6 @@ const Header = () => {
                                             className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
                                         >
                                             <FaUserCircle className="mr-2" /> Profile
-                                        </button>
-                                        <button 
-                                            onClick={handleMessagesClick}
-                                            className="flex items-center px-4 py-2 text-gray-800 hover:bg-gray-200 w-full text-left"
-                                        >
-                                            <FaComment className="mr-2" /> Messages
                                         </button>
 
                                         {isAdmin && (
@@ -239,10 +222,6 @@ const Header = () => {
                 isOpen={changeUsernameModalVisible} 
                 onClose={() => setChangeUsernameModalVisible(false)} 
                 onSuccess={handleChangeUsernameSuccess}
-            />
-            <ChatModal 
-                isOpen={chatModalVisible} 
-                onClose={() => setChatModalVisible(false)} 
             />
         </header>
     );

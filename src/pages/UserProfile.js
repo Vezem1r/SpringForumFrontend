@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import TopicList from '../components/TopicList';
+import apiClient from '../axiosInstance';
 import TopicCard from '../components/TopicCard';
 import { FaEnvelope, FaComments, FaList, FaStar, FaCalendarAlt } from 'react-icons/fa';
 import Header from '../components/Header';
@@ -24,7 +23,7 @@ const UserProfile = () => {
                         Authorization: token ? `Bearer ${token}` : undefined,
                     },
                 };
-                const response = await axios.get(`http://localhost:8080/profilepage/${username}?page=${pageNum}`, config);
+                const response = await apiClient.get(`/profilepage/${username}?page=${pageNum}`, config);
                 const data = response.data;
 
                 if (pageNum === 0) {

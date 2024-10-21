@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../axiosInstance';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Title, Tooltip, Legend } from 'chart.js';
 import TagManagement from '../components/admin/TagManagement';
@@ -21,7 +21,7 @@ const AdminDashboard = () => {
         const fetchAdminData = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8080/admin/dashboard', {
+                const response = await apiClient.get('/admin/dashboard', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../axiosInstance';
 
 const CategoryManagement = ({ onClose }) => {
     const [categories, setCategories] = useState([]);
@@ -13,7 +13,7 @@ const CategoryManagement = ({ onClose }) => {
         const fetchCategories = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8080/admin/category/getAllCategories', {
+                const response = await apiClient.get('/admin/category/getAllCategories', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -30,7 +30,7 @@ const CategoryManagement = ({ onClose }) => {
     const handleCreateCategory = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('http://localhost:8080/admin/category/create', {
+            const response = await apiClient.post('/admin/category/create', {
                 name: categoryName,
                 description: categoryDescription,
             }, {
@@ -49,7 +49,7 @@ const CategoryManagement = ({ onClose }) => {
     const handleUpdateCategory = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put(`http://localhost:8080/admin/category/update/${editingCategoryId}`, {
+            const response = await apiClient.put(`/admin/category/update/${editingCategoryId}`, {
                 name: categoryName,
                 description: categoryDescription,
             }, {
@@ -69,7 +69,7 @@ const CategoryManagement = ({ onClose }) => {
     const handleDeleteCategory = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:8080/admin/category/delete/${id}`, {
+            await apiClient.delete(`/admin/category/delete/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

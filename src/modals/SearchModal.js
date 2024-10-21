@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import axios from 'axios';
+import apiClient from '../axiosInstance';
 import { FaSearch, FaTag, FaStar, FaLayerGroup, FaCalendarAlt, FaTimes } from 'react-icons/fa';
 import '../styles/SearchModal.css';
 
@@ -20,7 +20,7 @@ const SearchModal = ({ isOpen, onClose, onSearch }) => {
 
     useEffect(() => {
         if (isOpen) {
-            axios.get('http://localhost:8080/homepage/getAllCategories')
+            apiClient.get('/homepage/getAllCategories')
                 .then((response) => {
                     setCategories(response.data);
                 })
@@ -47,7 +47,7 @@ const SearchModal = ({ isOpen, onClose, onSearch }) => {
 
         console.log('Params to send:', paramsToSend);
 
-        axios.get('http://localhost:8080/homepage/search', { params: paramsToSend })
+        apiClient.get('/homepage/search', { params: paramsToSend })
             .then(response => {
                 onSearch(response.data);
                 onClose();

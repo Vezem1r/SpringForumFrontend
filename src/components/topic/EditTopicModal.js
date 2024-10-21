@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import apiClient from '../../axiosInstance';
 
 const EditTopicModal = ({ topic, onClose, refreshTopic }) => {
     const [title, setTitle] = useState(topic.title);
@@ -21,7 +21,7 @@ const EditTopicModal = ({ topic, onClose, refreshTopic }) => {
         if (banner) formData.append('banner', banner);
 
         try {
-            const response = await axios.put(`http://localhost:8080/admin/topics/${topic.topicId}`, formData, {
+            const response = await apiClient.put(`/admin/topics/${topic.topicId}`, formData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'Content-Type': 'multipart/form-data',

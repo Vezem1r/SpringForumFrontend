@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import apiClient from '../axiosInstance';
 import Header from '../components/Header';
 import Banner from '../components/topic/banner';
 import TopicInfo from '../components/topic/TopicInfo';
@@ -21,9 +21,9 @@ const TopicPage = () => {
 
     const BASE_URL = "http://localhost:8080/banners/";
 
-    const fetchTopic = async () => {
+    const fetchTopic = useCallback(async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/topicpage/${id}?page=${pageNum}`);
+            const response = await apiClient.get(`/topicpage/${id}?page=${pageNum}`);
             const updatedTopic = {
                 ...response.data,
                 bannerUrl: response.data.bannerUrl ? BASE_URL + response.data.bannerUrl.split('\\').pop() : null
@@ -44,11 +44,12 @@ const TopicPage = () => {
         } finally {
             setLoading(false);
         }
-    };
-
+    }, [id, pageNum]);
+    
     useEffect(() => {
         fetchTopic();
-    }, [id, pageNum]);
+    }, [fetchTopic]);
+    
 
     const handleCommentAdded = (newComment) => {
         setTopic(prevTopic => ({

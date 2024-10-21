@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import apiClient from '../../axiosInstance';
 
 const UserManagement = ({ onClose }) => {
     const [users, setUsers] = useState([]);
@@ -13,7 +13,7 @@ const UserManagement = ({ onClose }) => {
         const fetchUsers = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8080/admin/users', {
+                const response = await apiClient.get('/admin/users', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -44,8 +44,8 @@ const UserManagement = ({ onClose }) => {
             if (avatar) formData.append('avatar', avatar);
 
             const token = localStorage.getItem('token');
-            const response = await axios.put(
-                `http://localhost:8080/admin/users/${selectedUser.userId}`,
+            const response = await apiClient.put(
+                `/admin/users/${selectedUser.userId}`,
                 formData,
                 {
                     headers: {

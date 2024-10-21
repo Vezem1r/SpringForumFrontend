@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
-import { AuthContext } from '../context/AuthContext'; // Ensure you have this context for token access
-import { toast, ToastContainer } from 'react-toastify';
+import { AuthContext } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const UploadAvatarModal = ({ isOpen, onClose, onSuccess }) => {
-    const { token } = useContext(AuthContext); // Access the token from context
+    const { token } = useContext(AuthContext);
     const [avatar, setAvatar] = useState(null);
     const [error, setError] = useState('');
 
@@ -24,11 +24,10 @@ const UploadAvatarModal = ({ isOpen, onClose, onSuccess }) => {
         formData.append('avatar', avatar);
     
         try {
-            const token = localStorage.getItem('token'); // Retrieve the token
             const response = await axios.post('http://localhost:8080/users/upload-avatar', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer ${token}`, // Include the JWT token
+                    'Authorization': `Bearer ${token}`,
                 },
             });
             onSuccess(response.data);
@@ -36,7 +35,7 @@ const UploadAvatarModal = ({ isOpen, onClose, onSuccess }) => {
             toast.success("Avatar uploaded successfully!");
         } catch (err) {
             setError("Failed to upload avatar.");
-            console.error(err); // Log the error for debugging
+            console.error(err);
         }
     };
     

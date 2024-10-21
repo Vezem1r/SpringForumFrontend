@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../../context/AuthContext';
 import EditTopicModal from './EditTopicModal'; 
+import apiClient from '../../axiosInstance';
 
 const TopicInfo = ({ topic, refreshTopic }) => {
-    const [rating, setRating] = useState(topic.rating);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const { isLoggedIn, isAdmin } = useContext(AuthContext);
@@ -18,7 +18,7 @@ const TopicInfo = ({ topic, refreshTopic }) => {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/ratings/topic/${topic.topicId}?value=${value}`, {
+            const response = await fetch(`${apiClient.defaults.baseURL}/ratings/topic/${topic.topicId}?value=${value}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -37,7 +37,7 @@ const TopicInfo = ({ topic, refreshTopic }) => {
 
     const handleDelete = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/admin/topics/${topic.topicId}`, {
+            const response = await fetch(`${apiClient.defaults.baseURL}/admin/topics/${topic.topicId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -147,7 +147,7 @@ const TopicInfo = ({ topic, refreshTopic }) => {
                                 <div key={attachment.attachmentId} className="flex items-center mt-1">
                                     <FaFolder className="mr-2 text-gray-600" />
                                     <a
-                                        href={`http://localhost:8080/topicpage/topics/${topic.topicId}/attachments/download/${attachment.attachmentId}`}
+                                        href={`${apiClient.defaults.baseURL}/topicpage/topics/${topic.topicId}/attachments/download/${attachment.attachmentId}`}
                                         className="text-purple-500 underline hover:text-purple-700"
                                     >
                                         {attachment.filename}

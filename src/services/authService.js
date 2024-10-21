@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { comma } from 'postcss/lib/list';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const API_URL = 'http://localhost:8080/auth';
@@ -94,7 +93,7 @@ const confirmPasswordReset = async (email, resetCode, newPassword) => {
     }
 };
 
-export default {
+const authService = {
     register,
     verifyCode,
     sendVerificationCode,
@@ -102,3 +101,5 @@ export default {
     requestPasswordReset,
     confirmPasswordReset,
 };
+
+export default authService;

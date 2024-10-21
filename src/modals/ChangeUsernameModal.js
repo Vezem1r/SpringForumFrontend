@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import Modal from 'react-modal';
-import axios from 'axios';
+import apiClient from '../axiosInstance';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContext } from '../context/AuthContext';
@@ -19,8 +19,8 @@ const ChangeUsernameModal = ({ isOpen, onClose, onSuccess }) => {
         const token = localStorage.getItem('token');
 
         try {
-            const response = await axios.post(
-                'http://localhost:8080/users/change-username',
+            const response = await apiClient.post(
+                '/users/change-username',
                 { newUsername },
                 {
                     headers: {

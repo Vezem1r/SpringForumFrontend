@@ -4,6 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import { FaTrash } from 'react-icons/fa';
 import 'react-toastify/dist/ReactToastify.css';
+import apiClient from '../../axiosInstance';
 
 const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
     const [showReplies, setShowReplies] = useState(false);
@@ -23,7 +24,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
     useEffect(() => {
         const fetchReplies = async (page) => {
             try {
-                const response = await fetch(`http://localhost:8080/topicpage/${comment.commentId}/replies?page=${page}`);
+                const response = await fetch(`${apiClient.defaults.baseURL}/topicpage/${comment.commentId}/replies?page=${page}`);
                 const data = await response.json();
                 setReplies(data.content);
                 setTotalReplies(data.totalElements);
@@ -44,7 +45,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
 
     const fetchUpdatedRating = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/topicpage/comments/${currentComment.commentId}/rating`);
+            const response = await fetch(`${apiClient.defaults.baseURL}/topicpage/comments/${currentComment.commentId}/rating`);
             if (response.ok) {
                 const newRating = await response.json();
                 setComment((prevComment) => ({ ...prevComment, rating: newRating }));
@@ -68,15 +69,12 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
             formData.append('attachments', file);
         });
 
-        console.log(replyAttachments);
-
         try {
-            const response = await fetch('http://localhost:8080/comments/add', {
-                method: 'POST',
+            const response = await apiClient.post('/comments/add', formData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'multipart/form-data',
                 },
-                body: formData,
             });
 
             if (response.ok) {
@@ -100,7 +98,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/ratings/comment/${currentComment.commentId}?value=${value}`, {
+            const response = await fetch(`${apiClient.defaults.baseURL}/ratings/comment/${currentComment.commentId}?value=${value}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -134,7 +132,7 @@ const Comment = ({ comment, topicId, handleReplyAdded, refreshTopic }) => {
 
     const handleDeleteComment = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/admin/comments/${currentComment.commentId}`, {
+            const response = await fetch(`${apiClient.defaults.baseURL}/admin/comments/${currentComment.commentId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,

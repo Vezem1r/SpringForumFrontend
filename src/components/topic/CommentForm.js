@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import apiClient from '../../axiosInstance';
 
 const CommentForm = ({ topicId, onCommentAdded }) => {
     const [content, setContent] = useState('');
@@ -24,12 +25,11 @@ const CommentForm = ({ topicId, onCommentAdded }) => {
         });
 
         try {
-            const response = await fetch('http://localhost:8080/comments/add', {
-                method: 'POST',
+            const response = await apiClient.post('/comments/add', formData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'multipart/form-data',
                 },
-                body: formData,
             });
 
             if (response.ok) {

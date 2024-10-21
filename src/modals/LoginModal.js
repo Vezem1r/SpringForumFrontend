@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import authService from '../services/authService';
-import {toast, ToastContainer } from 'react-toastify';
+import {toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const LoginModal = ({ isOpen, onClose, onLogin, onRegisterClick, onForgotPasswordClick, prefilledEmail }) => {
     const [usernameOrEmail, setUsernameOrEmail] = useState(prefilledEmail || '');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
 
     useEffect(() => {
         setUsernameOrEmail(prefilledEmail || '');
@@ -14,7 +13,6 @@ const LoginModal = ({ isOpen, onClose, onLogin, onRegisterClick, onForgotPasswor
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        setError('');
 
         try {
             const data = await authService.login(usernameOrEmail, password);

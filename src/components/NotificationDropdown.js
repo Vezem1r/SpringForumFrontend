@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { FaBell, FaRegComment, FaHeart, FaReply, FaCheck, FaTimes, FaExclamationTriangle } from 'react-icons/fa';
 import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+import apiClient from '../axiosInstance';
 
 const NotificationDropDown = () => {
     const { isLoggedIn } = useContext(AuthContext);
@@ -16,7 +16,7 @@ const NotificationDropDown = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get('http://localhost:8080/user/notifications', {
+            const response = await apiClient.get('/user/notifications', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -42,7 +42,7 @@ const NotificationDropDown = () => {
 
     const markAsRead = async (id) => {
         try {
-            await axios.post(`http://localhost:8080/user/notifications/${id}/mark-as-read`, {}, {
+            await apiClient.post(`/user/notifications/${id}/mark-as-read`, {}, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -56,7 +56,7 @@ const NotificationDropDown = () => {
 
     const markAllAsRead = async () => {
         try {
-            await axios.post('http://localhost:8080/user/notifications/mark-all-as-read', {}, {
+            await apiClient.post('/user/notifications/mark-all-as-read', {}, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -70,7 +70,7 @@ const NotificationDropDown = () => {
 
     const deleteNotification = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/user/notifications/${id}`, {
+            await apiClient.delete(`/user/notifications/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -84,7 +84,7 @@ const NotificationDropDown = () => {
 
     const deleteAllNotifications = async () => {
         try {
-            await axios.delete('http://localhost:8080/user/notifications/deleteAll', {
+            await apiClient.delete('/user/notifications/deleteAll', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },

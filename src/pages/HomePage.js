@@ -6,6 +6,7 @@ import SearchModal from '../modals/SearchModal';
 import SearchBar from '../components/SearchBar';
 import CreateTopicModal from '../modals/CreateTopicModal';
 import { AuthContext } from '../context/AuthContext';
+import apiClient from '../axiosInstance';
 
 const HomePage = () => {
     const { isLoggedIn, username, logout } = useContext(AuthContext);
@@ -19,22 +20,22 @@ const HomePage = () => {
     const [isCreateTopicModalOpen, setIsCreateTopicModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const fetchTopics = useCallback(async (pageNum = 0) => {
+    const fetchTopics = useCallback(async () => {
         if (loading) return;
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:8080/homepage/getAllTopics?page=${pageNum}&sort=createdAt,desc`);
+            const response = await fetch(`${apiClient.defaults.baseURL}/homepage/getAllTopics?page=${page}&sort=createdAt,desc`);
             const data = await response.json();
             setTopics((prevTopics) => [...prevTopics, ...data.content]);
             setTotalPages(data.totalPages);
-            setHasMore(pageNum < data.totalPages - 1);
+            setHasMore(page < data.totalPages - 1);
         } catch (error) {
             console.error('Error fetching topics:', error);
         } finally {
             setLoading(false);
         }
-    }, [page, loading, hasMore]);
-
+    }, [loading, page]);
+    
     useEffect(() => {
         fetchTopics();
     }, []);
@@ -53,11 +54,13 @@ const HomePage = () => {
     const handleScroll = useCallback(() => {
         const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight;
         if (bottom && hasMore) {
-            setPage(page + 1);
-            fetchTopics(page + 1);
-            console.log(page)
+            setPage((prevPage) => {
+                const nextPage = prevPage + 1;
+                fetchTopics(nextPage);
+                return nextPage;
+            });
         }
-    }, [hasMore]);
+    }, [hasMore, fetchTopics]);
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
@@ -112,7 +115,7 @@ const HomePage = () => {
             </div>
 
             <main className="flex-grow p-4">
-            {(filteredTopics.length === 0 || searchQuery === "" && filteredTopics.length === 0) && (
+            {(filteredTopics.length === 0 || (searchQuery === "" && filteredTopics.length === 0)) && (
                 <div className="mt-4 text-center text-gray-600">
                     No topics found that match your criteria.
                 </div>
